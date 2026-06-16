@@ -1,0 +1,6 @@
+{
+  "name": "Scientific Calculator",
+  "description": "A comprehensive, high-fidelity scientific calculator modeled on modern Casio devices, featuring advanced calculation modes (General, Complex, Base-N, Equation Solver, Matrix, Statistics), variable memories, and built-in unit converters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
