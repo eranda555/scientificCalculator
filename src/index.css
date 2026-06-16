@@ -6,3 +6,31 @@
   --font-serif: "Playfair Display", ui-serif, Cambria, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+/* Dynamic keypad responsive overrides for desktop & mobile viewport fitness */
+#calculator_keyboard button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#calculator_keyboard .h-8 {
+  height: var(--sci-key-h, 32px) !important;
+  font-size: var(--sci-key-fs, 12px) !important;
+}
+
+#calculator_keyboard .h-10 {
+  height: var(--std-key-h, 40px) !important;
+  font-size: var(--std-key-fs, 15px) !important;
+}
+
+#calculator_keyboard .w-18.h-18 {
+  width: var(--dpad-sz, 72px) !important;
+  height: var(--dpad-sz, 72px) !important;
+}
+
+#calculator_keyboard #btn_shift, 
+#calculator_keyboard #btn_alpha, 
+#calculator_keyboard #btn_mode {
+  width: var(--ctrl-key-w, 48px) !important;
+  height: var(--ctrl-key-h, 26px) !important;
+  font-size: var(--ctrl-key-fs, 9px) !important;
+}

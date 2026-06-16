@@ -77,6 +77,27 @@ export default function App() {
   const [editingVar, setEditingVar] = useState<keyof CalcVariables | null>(null);
   const [editingVarVal, setEditingVarVal] = useState("");
   const [currentTime, setCurrentTime] = useState("");
+  
+  // Dynamic scale state
+  const [calScale, setCalScale] = useState<"compact" | "normal" | "large" | "full">(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 480) {
+      return "compact";
+    }
+    return "normal";
+  });
+
+  // Helper functions for dynamic scale classes
+  const getsKeyH = () => {
+    if (calScale === "compact") return "h-7 text-[10px]";
+    if (calScale === "large") return "h-9.5 text-sm";
+    return "h-8 text-xs";
+  };
+
+  const getnKeyH = () => {
+    if (calScale === "compact") return "h-8.5 text-xs pb-0.5";
+    if (calScale === "large") return "h-12.5 text-lg pb-1";
+    return "h-10 text-md pb-0.5";
+  };
 
   // Live clock updates
   useEffect(() => {
@@ -290,10 +311,42 @@ export default function App() {
         {/* ============================================================
             LEFT HALF: THE PHYSICAL-STYLE CALCULATOR CHASSIS
             ============================================================ */}
-        <div className="lg:col-span-5 flex justify-center w-full">
+        <div id="calculator_chassis_wrap" className="lg:col-span-5 flex flex-col items-center gap-2.5 w-full">
+          {/* Dynamic Interactive Size Adaptation Bar */}
+          <div className="w-full max-w-[420px] flex justify-between items-center bg-[#0d0d10] px-3 py-1.5 rounded-lg border border-zinc-900 shadow">
+            <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-400 font-bold flex items-center gap-1.5 select-none pointer-events-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-[ping_1.5s_infinite]"></span>
+              Display Size
+            </span>
+            <div className="flex bg-zinc-950 p-0.5 rounded-md border border-zinc-900">
+              {(["compact", "normal", "large", "full"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  id={`btn_scale_${mode}`}
+                  onClick={() => setCalScale(mode)}
+                  className={`text-[9px] font-sans font-bold px-1.5 py-0.5 sm:px-2 rounded uppercase transition-colors cursor-pointer ${
+                    calScale === mode
+                      ? "bg-zinc-100 text-zinc-950 shadow"
+                      : "text-zinc-500 hover:text-zinc-350"
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div
             id="calculator_chassis"
-            className="w-full max-w-[420px] bg-[#121216] p-6 rounded-2xl border border-zinc-800 shadow-2xl relative flex flex-col gap-4 self-center"
+            className={`w-full bg-[#121216] rounded-2xl border border-zinc-800 shadow-2xl relative flex flex-col transition-all duration-300 ${
+              calScale === "compact"
+                ? "max-w-[340px] p-3 sm:p-4 gap-2.5"
+                : calScale === "large"
+                ? "max-w-[490px] p-7 md:p-8 gap-5"
+                : calScale === "full"
+                ? "max-w-full p-4 sm:p-5 md:p-6 gap-3.5"
+                : "max-w-[420px] p-5 sm:p-6 gap-3.5 md:gap-4" // normal
+            }`}
           >
             {/* Casio Branding Header */}
             <div className="flex justify-between items-center px-1">
@@ -336,6 +389,7 @@ export default function App() {
               isAlpha={isAlpha}
               isMemoryNonZero={isMemoryActive()}
               showFraction={showFraction}
+              calScale={calScale}
             />
 
             {/* GRAPHICAL CLASSWIZ MODE MENU OVERLAY */}
@@ -386,7 +440,20 @@ export default function App() {
             )}
 
             {/* CHASSIS PHYSICAL INTERACTIVE KEYBOARD */}
-            <div id="calculator_keyboard" className="flex flex-col gap-3">
+            <div
+              id="calculator_keyboard"
+              className={`flex flex-col transition-all duration-300 ${calScale === "compact" ? "gap-1.5" : calScale === "large" ? "gap-4" : "gap-3"}`}
+              style={{
+                "--sci-key-h": calScale === "compact" ? "26px" : calScale === "large" ? "38px" : "32px",
+                "--sci-key-fs": calScale === "compact" ? "10px" : calScale === "large" ? "13px" : "11px",
+                "--std-key-h": calScale === "compact" ? "32px" : calScale === "large" ? "48px" : "40px",
+                "--std-key-fs": calScale === "compact" ? "12px" : calScale === "large" ? "18px" : "15px",
+                "--dpad-sz": calScale === "compact" ? "54px" : calScale === "large" ? "84px" : "72px",
+                "--ctrl-key-w": calScale === "compact" ? "38px" : calScale === "large" ? "56px" : "46px",
+                "--ctrl-key-h": calScale === "compact" ? "22px" : calScale === "large" ? "32px" : "26px",
+                "--ctrl-key-fs": calScale === "compact" ? "8px" : calScale === "large" ? "11px" : "9px",
+              } as React.CSSProperties}
+            >
               
               {/* --- SECONDARY CONTROLS ROW (SHIFT, ALPHA, ARROWS, MODE, ON) --- */}
               <div className="grid grid-cols-12 gap-2.5 items-center">

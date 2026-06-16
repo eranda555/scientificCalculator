@@ -17,6 +17,7 @@ interface CalculatorScreenProps {
   isAlpha: boolean;
   isMemoryNonZero: boolean;
   showFraction: boolean; // Toggled by [S-D] key
+  calScale?: "compact" | "normal" | "large" | "full";
 }
 
 export default function CalculatorScreen({
@@ -29,6 +30,7 @@ export default function CalculatorScreen({
   isAlpha,
   isMemoryNonZero,
   showFraction,
+  calScale = "normal",
 }: CalculatorScreenProps) {
 
   // Replace operator symbols for attractive classic dot-matrix display
@@ -85,7 +87,13 @@ export default function CalculatorScreen({
   return (
     <div
       id="calculator_screen"
-      className="bg-black/55 border border-zinc-800 rounded-xl p-4 shadow-inner relative flex flex-col justify-between select-none h-32 md:h-36 overflow-hidden text-zinc-100"
+      className={`bg-black/55 border border-zinc-800 rounded-xl shadow-inner relative flex flex-col justify-between select-none overflow-hidden text-zinc-100 transition-all duration-300 ${
+        calScale === "compact"
+          ? "h-26 p-2.5"
+          : calScale === "large"
+          ? "h-40 p-5"
+          : "h-32 md:h-36 p-4" // normal / full
+      }`}
     >
       {/* Top Status Bar Indicators */}
       <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 border-b border-zinc-800/60 pb-1.5">
@@ -114,13 +122,13 @@ export default function CalculatorScreen({
         </div>
 
         {/* Mode Indicators */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {calcMode === CalcMode.BASE_N ? (
             <span className="font-semibold text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded text-[9px] border border-amber-500/20">{baseNMode}</span>
           ) : (
-            <span className="font-semibold text-zinc-400 bg-zinc-805/30 px-1.5 py-0.5 rounded text-[9px] border border-zinc-800/50">{calcMode}</span>
+            <span className="font-semibold text-zinc-400 bg-zinc-800/30 px-1.5 py-0.5 rounded text-[9px] border border-zinc-800/50">{calcMode}</span>
           )}
-          <div className="flex items-center gap-1 border-l border-zinc-800 pl-2">
+          <div className="flex items-center gap-1 border-l border-zinc-800 pl-1.5">
             <span className={angleMode === "DEG" ? "text-emerald-500 font-bold text-[9px] bg-emerald-500/10 px-1 rounded border border-emerald-500/20" : "opacity-30 text-[9px]"}>DEG</span>
             <span className={angleMode === "RAD" ? "text-emerald-500 font-bold text-[9px] bg-emerald-500/10 px-1 rounded border border-emerald-500/20" : "opacity-30 text-[9px]"}>RAD</span>
             <span className={angleMode === "GRAD" ? "text-emerald-500 font-bold text-[9px] bg-emerald-500/10 px-1 rounded border border-emerald-500/20" : "opacity-30 text-[9px]"}>GRAD</span>
@@ -131,17 +139,23 @@ export default function CalculatorScreen({
       {/* Primary Mathematical Expression Input */}
       <div className="flex-1 my-1 overflow-x-auto overflow-y-hidden whitespace-nowrap scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent py-1 flex items-center">
         {expression ? (
-          <span className="text-md md:text-lg font-mono text-zinc-400 tracking-wide">
+          <span className={`font-mono text-zinc-400 tracking-wide transition-all ${
+            calScale === "compact" ? "text-xs" : calScale === "large" ? "text-lg md:text-xl" : "text-md md:text-lg"
+          }`}>
             {formatExpression(expression)}
             <span className="animate-[pulse_1s_infinite] ml-0.5 text-zinc-100">|</span>
           </span>
         ) : (
-          <span className="text-xs text-zinc-650 font-mono italic">Enter expression...</span>
+          <span className={`font-mono italic text-zinc-650 transition-all ${
+            calScale === "compact" ? "text-[10px]" : "text-xs"
+          }`}>Enter expression...</span>
         )}
       </div>
 
       {/* Result Display Line */}
-      <div className="text-right text-xl md:text-2xl font-mono tracking-normal font-semibold text-zinc-100 min-h-[32px] flex items-center justify-end select-text">
+      <div className={`text-right font-mono tracking-normal font-semibold text-zinc-100 min-h-[28px] flex items-center justify-end select-text transition-all ${
+        calScale === "compact" ? "text-md" : calScale === "large" ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"
+      }`}>
         {renderResult()}
       </div>
     </div>
