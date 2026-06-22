@@ -1,20 +1,35 @@
-<div align="center">
+# Scientific Calculator
 
-</div>
+A responsive scientific calculator developed using TypeScript and modern web technologies.
 
-# Run and deploy your AI Studio app
+## Features
 
-This contains everything you need to run your app locally.
+- Basic arithmetic operations
+  - Addition
+  - Subtraction
+  - Multiplication
+  - Division
 
-View your app in AI Studio: https://ai.studio/apps/17900502-f7de-4466-bfc4-cc902e7bdd9d
+- Scientific functions
+  - Square Root
+  - Power Functions
+  - Logarithms
+  - Trigonometric Functions
 
-## Run Locally
+- Percentage calculations
 
-**Prerequisites:**  Node.js
+- Responsive user interface that adapts to different screen sizes
 
+## Technologies Used
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- TypeScript
+- HTML
+- CSS
+- Vite
+
+## Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/eranda555/scientificCalculator.git
